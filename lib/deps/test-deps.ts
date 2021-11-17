@@ -1,3 +1,4 @@
+// TODO TO-BE-EXTERNALIZED
 import { MapperFunction } from "../interfaces/MapperFunction.ts";
 
 export {
