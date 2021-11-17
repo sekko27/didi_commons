@@ -1,7 +1,7 @@
 import * as Didi from "../../deps/test-deps.ts";
 import { Supplier, UndefinedSupplier } from "../../interfaces/Supplier.ts";
 import { some, other, error, empty } from "./helpers.ts";
-import { NoSuchElementException } from "../../NoSuchElementException.ts";
+import { NoSuchElementException } from "../../errors/NoSuchElementException.ts";
 
 Didi.test("it should be empty")
     .toBeTrue(() => empty().empty());

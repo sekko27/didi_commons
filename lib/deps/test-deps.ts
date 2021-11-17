@@ -4,13 +4,13 @@ import { MapperFunction } from "../interfaces/MapperFunction.ts";
 export {
     assertEquals,
     assertStrictEquals
-} from "https://deno.land/std@0.114.0/testing/asserts.ts";
+} from "asserts";
 
 import {
     assertEquals as toBeEqual,
     assertStrictEquals as toBeStrictEqual,
     assertThrows as toBeThrown,
-} from "https://deno.land/std@0.114.0/testing/asserts.ts";
+} from "asserts";
 
 import type { Supplier } from "../interfaces/Supplier.ts";
 

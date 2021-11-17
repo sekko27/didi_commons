@@ -1,5 +1,5 @@
 import { IOptional } from "./IOptional.ts";
-import { NoSuchElementException } from "../NoSuchElementException.ts";
+import { NoSuchElementException } from "../errors/NoSuchElementException.ts";
 import { Supplier } from "../interfaces/Supplier.ts";
 
 export class EmptyOptional implements IOptional<undefined> {
