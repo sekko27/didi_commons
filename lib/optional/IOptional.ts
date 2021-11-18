@@ -1,6 +1,6 @@
 import { Consumer } from "../interfaces/Consumer.ts";
 import { PredicateFunction } from "../interfaces/PredicateFunction.ts";
-import { MapperFunction } from "../interfaces/MapperFunction.ts";
+import { AsyncMapperFunction, MapperFunction } from "../interfaces/MapperFunction.ts";
 import { Supplier } from "../interfaces/Supplier.ts";
 
 export interface IOptional<T> {
@@ -10,6 +10,7 @@ export interface IOptional<T> {
     get(): T;
     filter(predicate: PredicateFunction<T>): IOptional<T | undefined>;
     map<R>(mapper: MapperFunction<T, R>): IOptional<R | undefined>;
+    asyncMap<R>(mapper: AsyncMapperFunction<T, R>): Promise<IOptional<R | undefined>>;
     mapNullable<R>(mapper: MapperFunction<T, R | null>): IOptional<R | undefined>;
     flatMap<R>(mapper: MapperFunction<T, IOptional<R>>): IOptional<R | undefined>;
     orElse(other: T): T;

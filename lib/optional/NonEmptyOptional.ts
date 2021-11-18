@@ -1,6 +1,6 @@
 import { IOptional } from "./IOptional.ts";
 import { IOptionalFactory } from "./IOptionalFactory.ts";
-import { MapperFunction } from "../interfaces/MapperFunction.ts";
+import { AsyncMapperFunction, MapperFunction } from "../interfaces/MapperFunction.ts";
 import { Supplier } from "../interfaces/Supplier.ts";
 
 export class NonEmptyOptional<T> implements IOptional<T> {
@@ -36,6 +36,10 @@ export class NonEmptyOptional<T> implements IOptional<T> {
 
     mapNullable<R>(mapper: MapperFunction<T, R | null>): IOptional<R | undefined> {
         return this.optionalFactory.ofNullable(mapper(this.value));
+    }
+
+    async asyncMap<R>(mapper: AsyncMapperFunction<T, R>): Promise<IOptional<R | undefined>> {
+        return this.optionalFactory.of(await mapper(this.value));
     }
 
     flatMap<R>(mapper: MapperFunction<T, IOptional<R>>): IOptional<R> {

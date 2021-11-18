@@ -26,6 +26,10 @@ export class EmptyOptional implements IOptional<undefined> {
         return this;
     }
 
+    asyncMap<R>(): Promise<IOptional<R | undefined>> {
+        return Promise.resolve(this);
+    }
+
     mapNullable<R>(): IOptional<R | undefined> {
         return this;
     }
