@@ -16,9 +16,9 @@ import type { Supplier } from "../interfaces/Supplier.ts";
 
 export type TestFunction<A extends unknown[], R> = (...args: A) => R;
 
-function toBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => void, expected = true) {
+async function toBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => unknown | Promise<unknown>, expected = true) {
     let invoked = false;
-    executor((...args: A): R => {
+    await executor((...args: A): R => {
        invoked = true;
        return func(...args);
     });
@@ -43,15 +43,19 @@ class TestCaseBuilder {
     }
 
     public toBeFalse(supplier: Supplier<unknown>) {
-        this.run(() => toBeEqual(supplier(), false));
+        this.run(async () => toBeEqual(await supplier(), false));
     }
 
     public toBeTrue(supplier: Supplier<unknown>) {
-        this.run(() => toBeEqual(supplier(), true));
+        this.run(async () => toBeEqual(await supplier(), true));
     }
 
-    public toBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => void, expected = true) {
+    public toBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => unknown | Promise<unknown>, expected = true) {
         this.run(() => toBeInvoked(func, executor, expected));
+    }
+
+    public notToBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => unknown | Promise<unknown>) {
+        this.toBeInvoked(func, executor, false);
     }
 
     public toBeSameInstance(mapper: MapperFunction<unknown, unknown>) {

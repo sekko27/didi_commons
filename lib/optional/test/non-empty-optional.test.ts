@@ -57,13 +57,14 @@ Didi.test("orElse should response original value")
     .toBeFirst(({first, second}) => opt(first).orElse(second));
 
 Didi.test("orElseGet should not invoke supplier")
-    .toBeInvoked(() => "other", supplier => some().orElseGet(supplier), false);
+    .notToBeInvoked(() => "other", supplier => some().orElseGet(supplier));
 
 Didi.test("orElseGet should response original value")
     .toBeFirst(({first, second}) => opt(first).orElseGet(() => second));
 
 Didi.test("orElseThrow should not be invoked")
-    .toBeInvoked(error, supplier => some().orElseThrow(supplier), false);
+    .notToBeInvoked(error, supplier => some().orElseThrow(supplier));
 
 Didi.test("orElseThrow should response the original value")
     .toBeSameInstance(value => opt(value).orElseThrow(error));
+

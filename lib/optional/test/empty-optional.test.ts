@@ -10,31 +10,31 @@ Didi.test("it should be non-present")
     .toBeFalse(() => empty().isPresent());
 
 Didi.test("should not invoke consumer - ifPresent")
-    .toBeInvoked(() => {}, consumer => empty().ifPresent(consumer), false);
+    .notToBeInvoked(() => {}, consumer => empty().ifPresent(consumer));
 
 Didi.test("should throw error on getting value")
     .toBeThrown<NoSuchElementException>(() => empty().get(), NoSuchElementException);
 
 Didi.test("filter should not be invoked")
-    .toBeInvoked(() => true, predicate => empty().filter(predicate), false);
+    .notToBeInvoked(() => true, predicate => empty().filter(predicate));
 
 Didi.test("filter should response empty")
     .toBeTrue(() => empty().filter(() => true).empty());
 
 Didi.test("mapper should not be invoked")
-    .toBeInvoked(() => "other", mapper => empty().map(mapper), false);
+    .notToBeInvoked(() => "other", mapper => empty().map(mapper));
 
 Didi.test("map to should response empty")
     .toBeTrue(() => empty().map(UndefinedSupplier).empty());
 
 Didi.test("nullable-mapper should not be invoked")
-    .toBeInvoked(() => "other", mapper => empty().mapNullable(mapper), false);
+    .notToBeInvoked(() => "other", mapper => empty().mapNullable(mapper));
 
 Didi.test("nullable-map should response empty")
     .toBeTrue(() => empty().mapNullable(() => "some").empty());
 
 Didi.test("flat-map should not be invoked")
-    .toBeInvoked(other, mapper => empty().flatMap(mapper), false);
+    .notToBeInvoked(other, mapper => empty().flatMap(mapper));
 
 Didi.test("flat-map to empty to be empty")
     .toBeTrue(() => empty().flatMap(empty).empty());
@@ -53,4 +53,5 @@ Didi.test("orElseGet should response else value")
 
 Didi.test("orElseThrow should be invoked")
     .toBeThrown(() => empty().orElseThrow(error), Error);
+
 

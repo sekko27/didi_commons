@@ -1,4 +1,4 @@
-import { IOptional } from "./IOptional.ts";
+import { IOptional} from "./IOptional.ts";
 import { NoSuchElementException } from "../errors/NoSuchElementException.ts";
 import { Supplier } from "../interfaces/Supplier.ts";
 
@@ -26,10 +26,6 @@ export class EmptyOptional implements IOptional<undefined> {
         return this;
     }
 
-    asyncMap<R>(): Promise<IOptional<R | undefined>> {
-        return Promise.resolve(this);
-    }
-
     mapNullable<R>(): IOptional<R | undefined> {
         return this;
     }
@@ -49,5 +45,4 @@ export class EmptyOptional implements IOptional<undefined> {
     orElseThrow(supplier: Supplier<Error>): undefined {
         throw supplier();
     }
-
 }
