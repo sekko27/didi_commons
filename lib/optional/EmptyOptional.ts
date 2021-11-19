@@ -1,9 +1,12 @@
-import { IOptional } from "./IOptional.ts";
+import { AnyPromise, Awaited, IOptional, OptionalStreamOpResult, OptionalTerminationResult } from "./IOptional.ts";
 import { NoSuchElementException } from "../errors/NoSuchElementException.ts";
 import { Supplier } from "../interfaces/Supplier.ts";
+import { PredicateFunction } from "../interfaces/PredicateFunction.ts";
 
-export class EmptyOptional implements IOptional<undefined> {
-    empty(): boolean {
+type EmptyType = undefined | Promise<undefined>;
+export class EmptyOptional implements IOptional<EmptyType> {
+
+    empty(): OptionalTerminationResult<boolean, undefined> {
         return true;
     }
 
@@ -18,9 +21,15 @@ export class EmptyOptional implements IOptional<undefined> {
         throw new NoSuchElementException(`Requesting empty optional value`);
     }
 
-    filter(): IOptional<undefined> {
+    orElse<O extends PromiseLike<EmptyType> | EmptyType>(other: O): AnyPromise<EmptyType, EmptyType, O> {
+        return undefined;
+    }
+
+
+    filter<R extends boolean | Promise<boolean>>(predicate: PredicateFunction<Awaited<undefined>, R>): OptionalStreamOpResult<undefined, undefined, R> {
         return this;
     }
+
 
     map<R>(): IOptional<undefined> {
         return this;
@@ -38,16 +47,5 @@ export class EmptyOptional implements IOptional<undefined> {
         return this;
     }
 
-    orElse<T>(other: T): T {
-        return other;
-    }
-
-    orElseGet<T>(supplier: Supplier<T>): T {
-        return supplier();
-    }
-
-    orElseThrow(supplier: Supplier<Error>): undefined {
-        throw supplier();
-    }
 
 }
