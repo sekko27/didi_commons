@@ -1,8 +1,13 @@
 import { NoSuchElementException } from "../../../errors/NoSuchElementException.ts";
 import { Supplier } from "../../../interfaces/Supplier.ts";
 import { ISyncOptional } from "../interfaces/ISyncOptional.ts";
+import { IAsyncOptional } from "../../async/interfaces/IAsyncOptional.ts";
+import { IOptionalFactory } from "../interfaces/IOptionalFactory.ts";
 
 export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
+    constructor(private readonly factory: IOptionalFactory) {
+    }
+
     empty(): boolean {
         return true;
     }
@@ -18,12 +23,24 @@ export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
         return this;
     }
 
+    asyncFilter(): IAsyncOptional<any, any> {
+        return this.factory.asyncEmpty();
+    }
+
     map(): ISyncOptional<any, any> {
         return this;
     }
 
+    asyncMap<R>(): IAsyncOptional<R, any> {
+        return this.factory.asyncEmpty();
+    }
+
     flatMap(): ISyncOptional<any, any> {
         return this;
+    }
+
+    asyncFlatMap<R>(): IAsyncOptional<R, any> {
+        return this.factory.asyncEmpty();
     }
 
     get(): undefined {

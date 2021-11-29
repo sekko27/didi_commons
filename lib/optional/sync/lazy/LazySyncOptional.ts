@@ -6,6 +6,9 @@ import { NoSuchElementException } from "../../../errors/NoSuchElementException.t
 import { IEmpty } from "../../empty/IEmpty.ts";
 import { IOptionalValueProvider } from "../interfaces/IOptionalValueProvider.ts";
 import { ILazySyncOptional } from "../interfaces/ILazySyncOptional.ts";
+import { MaybePromise } from "../../../interfaces/Promises.ts";
+import { IAsyncOptional } from "../../async/interfaces/IAsyncOptional.ts";
+import { IOptionalFactory } from "../interfaces/IOptionalFactory.ts";
 
 export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     private box: {value: T | E} | undefined = undefined;
@@ -13,7 +16,8 @@ export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     constructor(
         private readonly previous: IOptionalValueProvider<P, E>,
         private readonly op: MapperFunction<P | E, T | E>,
-        private readonly emptiness: IEmpty<E>
+        private readonly emptiness: IEmpty<E>,
+        private readonly factory: IOptionalFactory,
     ) {
     }
 
@@ -43,23 +47,45 @@ export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
         return new LazySyncOptional<T, T, E>(
             this,
                 value => !this.emptiness.test(value) && predicate(value as T) ? value : this.emptiness.getValue(),
-            this.emptiness);
+            this.emptiness,
+            this.factory);
     }
+
+    asyncFilter(predicate: PredicateFunction<T, MaybePromise<boolean>>): IAsyncOptional<T, E> {
+        return this.factory.genericAsync<T, T, E>(this, async v => {
+            return !this.emptiness.test(v) && await predicate(v as T) ? v : this.emptiness.getValue();
+        }, this.emptiness);
+    }
+
 
     map<R>(mapper: MapperFunction<T, R | E>): ILazySyncOptional<R, E> {
         return new LazySyncOptional<T, R, E>(
             this,
                 value => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T),
-            this.emptiness
+            this.emptiness,
+            this.factory
         );
+    }
+
+    asyncMap<R>(mapper: MapperFunction<T, MaybePromise<R>>): IAsyncOptional<R, E> {
+        return this.factory.genericAsync<T, R, E>(this, async v => {
+            return this.emptiness.test(v) ? this.emptiness.getValue() : mapper(v as T);
+        }, this.emptiness);
     }
 
     flatMap<R>(mapper: MapperFunction<T, ILazySyncOptional<R, E>>): ILazySyncOptional<R, E> {
         return new LazySyncOptional<T, R, E>(
             this,
             value => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T).getValue(),
-            this.emptiness
+            this.emptiness,
+            this.factory
         );
+    }
+
+    asyncFlatMap<R>(mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>): IAsyncOptional<R, E> {
+        return this.factory.genericAsync<T, R, E>(this, async v => {
+            return this.emptiness.test(v) ? this.emptiness.getValue() : (await mapper(v as T)).getValue();
+        }, this.emptiness);
     }
 
     get(): T {
