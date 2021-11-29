@@ -42,16 +42,16 @@ function tests(ctx: ITestsContext<any>) {
     Didi.test("map to defined should response the same instance")
         .eventuallyToBeSameInstance(value => ctx.some().map(() => value).get());
 
-/*
     Didi.test("flat-map should be invoked")
-        .toBeInvoked(other, mapper => some().flatMap(mapper));
+        .eventuallyToBeInvoked(() => ctx.other(), async mapper => {
+            await ctx.some().flatMap(mapper).empty();
+        });
 
     Didi.test("flat-map to empty to be empty")
-        .toBeTrue(() => some().flatMap(empty).empty());
+        .eventuallyToBeTrue(() => ctx.some().flatMap(() => ctx.empty()).empty());
 
     Didi.test("flat-map to non-empty to be the same instance")
-        .toBeSameInstance(value => some().flatMap(() => opt(value)).get());
-*/
+        .eventuallyToBeSameInstance(value => ctx.some().flatMap(() => ctx.opt(value)).get());
 
     Didi.test("orElse should response original value")
         .eventuallyToBeFirst(({first, second}) => ctx.opt(first).orElse(second));

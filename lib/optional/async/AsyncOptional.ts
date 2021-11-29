@@ -8,7 +8,7 @@ import { Supplier } from "../../interfaces/Supplier.ts";
 import { IAsyncOptionalValueProvider } from "./AsyncOptionalFactory.ts";
 import { MaybePromise } from "../../interfaces/Promises.ts";
 
-export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E>, IAsyncOptionalValueProvider<T, E> {
+export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E> {
     private box: {value: MaybePromise<T | E>} | undefined = undefined;
 
     constructor(
@@ -51,6 +51,14 @@ export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E>, IAsyncOptio
         return new AsyncOptional<T, R, E>(
             this,
             (value: T | E) => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T),
+            this.emptiness
+        );
+    }
+
+    flatMap<R>(mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>): IAsyncOptional<R, E> {
+        return new AsyncOptional<T, R, E>(
+            this,
+            async (value: T | E) => this.emptiness.test(value) ? this.emptiness.getValue() : (await mapper(value as T)).getValue(),
             this.emptiness
         );
     }

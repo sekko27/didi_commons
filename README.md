@@ -12,6 +12,20 @@ It implements core types other modules use them.
 
 Module provides 3 implementations for Optional. They are available in Optional statics:
 
+#### Sync early
+
+This implementation evaluates current value for each operation (map, filter). Each operation and value must be non-promise.
+
+#### Sync lazy
+
+This implementation evaluates value only at termination (get, empty, etc). Each operation and value must be non-promise.
+
+#### Async lazy
+
+This implementation supports async values and async operations. It evaluates value at termination.
+
+#### Instantiation
+
 ```typescript
 // Default - sync + early + empty is undefined
 import { IEmpty } from "./IEmpty";
@@ -63,17 +77,20 @@ declare namespace Optional {
 }
 ```
 
-#### Sync early
+#### Examples
 
-This implementation evaluates current value for each operation (map, filter). Each operation and value must be non-promise.
+```typescript
+// Sync + early + empty is undefined
+Optional.of("some").filter(v => v.startsWith("s")); // Filter predicate invoked here
 
-#### Sync lazy
+// Sync + lazy + empty is undefined
+const o1 = Optional.ofLazy("some").filter(v => v.startsWith("s")); // Filter predicate NOT invoked here
+o1.get(); // only here
 
-This implementation evaluates value only at termination (get, empty, etc). Each operation and value must be non-promise.
-
-#### Async lazy
-
-This implementation supports async values and async operations. It evaluates value at termination.
+// Async is always lazy
+const o2 = Optional.ofAsync("some").filter(async v => repo.existsByName(v)).map(async v => tags.byName(v)); // filter and mapper NOT invoked here
+await o2.get(); // only here
+```
 
 ## Testing
 

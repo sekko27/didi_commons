@@ -9,6 +9,7 @@ export interface ISyncOptional<T, E> {
     ifPresent(consumer: Consumer<T>): void;
     filter(predicate: PredicateFunction<T, boolean>): ISyncOptional<T, E>;
     map<R>(mapper: MapperFunction<T, R | E>): ISyncOptional<R, E>;
+    flatMap<R>(mapper: MapperFunction<T, ISyncOptional<R, E>>): ISyncOptional<R, E>;
     get(): T;
     orElse(value: T): T;
     orElseGet(supplier: Supplier<T>): T;

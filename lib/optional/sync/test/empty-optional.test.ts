@@ -30,22 +30,14 @@ function tests(ctx: ITestsContext<any>) {
     Didi.test("map to should response empty")
         .toBeTrue(() => ctx.empty().map(UndefinedSupplier).empty());
 
-/*
-    Didi.test("nullable-mapper should not be invoked")
-        .toBeInvoked(() => "other", mapper => ctx.empty().mapNullable(mapper), false);
-
-    Didi.test("nullable-map should response empty")
-        .toBeTrue(() => empty().mapNullable(() => "some").empty());
-
     Didi.test("flat-map should not be invoked")
-        .toBeInvoked(other, mapper => empty().flatMap(mapper), false);
+        .toBeInvoked(ctx.other, mapper => ctx.empty().flatMap(mapper), false);
 
     Didi.test("flat-map to empty to be empty")
-        .toBeTrue(() => empty().flatMap(empty).empty());
+        .toBeTrue(() => ctx.empty().flatMap(ctx.empty).empty());
 
     Didi.test("flat-map to non-empty to be empty")
-        .toBeTrue(() => empty().flatMap(some).empty());
-*/
+        .toBeTrue(() => ctx.empty().flatMap(ctx.some).empty());
 
     Didi.test("orElse should response else value")
         .toBeSameInstance((value) => ctx.empty().orElse(value));

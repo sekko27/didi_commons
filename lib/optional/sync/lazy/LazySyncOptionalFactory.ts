@@ -6,11 +6,13 @@ export interface IOptionalValueProvider<T, E> {
     getValue(): T | E;
 }
 
+export interface ILazySyncOptional<T, E> extends ISyncOptional<T, E>, IOptionalValueProvider<T, E> {}
+
 export class LazySyncOptionalFactory {
     public static of<T, E>(
         value: T | E,
         emptiness: IEmpty<E>,
-    ): ISyncOptional<T, E> {
+    ): ILazySyncOptional<T, E> {
         return new LazySyncOptional<E, T, E>(emptiness, () => value, emptiness);
     }
 }

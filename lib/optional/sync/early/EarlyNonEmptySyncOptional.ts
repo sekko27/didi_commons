@@ -33,6 +33,12 @@ export class EarlyNonEmptySyncOptional<T, E> implements ISyncOptional<T, E> {
         return this.factory.of<R, E>(mapper(this.value), this.emptiness);
     }
 
+    flatMap<R>(mapper: MapperFunction<T, ISyncOptional<R, E>>): ISyncOptional<R, E> {
+        return this.emptiness.test(this.value)
+            ? this.factory.of<R, E>(this.emptiness.getValue(), this.emptiness)
+            : mapper(this.value);
+    }
+
     get(): T {
         return this.value;
     }

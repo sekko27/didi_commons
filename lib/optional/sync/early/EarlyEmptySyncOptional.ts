@@ -22,6 +22,10 @@ export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
         return this;
     }
 
+    flatMap(): ISyncOptional<any, any> {
+        return this;
+    }
+
     get(): undefined {
         throw new NoSuchElementException(`Requesting empty optional value`);
     }

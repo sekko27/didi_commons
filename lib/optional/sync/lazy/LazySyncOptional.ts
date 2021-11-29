@@ -1,13 +1,12 @@
-import { ISyncOptional } from "../interfaces/ISyncOptional.ts";
 import { Consumer } from "../../../interfaces/Consumer.ts";
 import { PredicateFunction } from "../../../interfaces/PredicateFunction.ts";
 import { MapperFunction } from "../../../interfaces/MapperFunction.ts";
 import { Supplier } from "../../../interfaces/Supplier.ts";
 import { NoSuchElementException } from "../../../errors/NoSuchElementException.ts";
-import { IOptionalValueProvider } from "./LazySyncOptionalFactory.ts";
+import { ILazySyncOptional, IOptionalValueProvider } from "./LazySyncOptionalFactory.ts";
 import { IEmpty } from "../../empty/IEmpty.ts";
 
-export class LazySyncOptional<P, T, E> implements ISyncOptional<T, E>, IOptionalValueProvider<T, E> {
+export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     private box: {value: T | E} | undefined = undefined;
 
     constructor(
@@ -39,18 +38,27 @@ export class LazySyncOptional<P, T, E> implements ISyncOptional<T, E>, IOptional
         }
     }
 
-    filter(predicate: PredicateFunction<T, boolean>): ISyncOptional<T, E> {
+    filter(predicate: PredicateFunction<T, boolean>): ILazySyncOptional<T, E> {
         return new LazySyncOptional<T, T, E>(
             this,
                 value => !this.emptiness.test(value) && predicate(value as T) ? value : this.emptiness.getValue(),
             this.emptiness);
     }
 
-    map<R>(mapper: MapperFunction<T, R | E>): ISyncOptional<R, E> {
+    map<R>(mapper: MapperFunction<T, R | E>): ILazySyncOptional<R, E> {
         return new LazySyncOptional<T, R, E>(
             this,
                 value => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T),
-            this.emptiness);
+            this.emptiness
+        );
+    }
+
+    flatMap<R>(mapper: MapperFunction<T, ILazySyncOptional<R, E>>): ILazySyncOptional<R, E> {
+        return new LazySyncOptional<T, R, E>(
+            this,
+            value => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T).getValue(),
+            this.emptiness
+        );
     }
 
     get(): T {
