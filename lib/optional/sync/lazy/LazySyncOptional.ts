@@ -3,8 +3,9 @@ import { PredicateFunction } from "../../../interfaces/PredicateFunction.ts";
 import { MapperFunction } from "../../../interfaces/MapperFunction.ts";
 import { Supplier } from "../../../interfaces/Supplier.ts";
 import { NoSuchElementException } from "../../../errors/NoSuchElementException.ts";
-import { ILazySyncOptional, IOptionalValueProvider } from "./LazySyncOptionalFactory.ts";
 import { IEmpty } from "../../empty/IEmpty.ts";
+import { IOptionalValueProvider } from "../interfaces/IOptionalValueProvider.ts";
+import { ILazySyncOptional } from "../interfaces/ILazySyncOptional.ts";
 
 export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     private box: {value: T | E} | undefined = undefined;

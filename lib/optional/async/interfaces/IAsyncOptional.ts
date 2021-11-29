@@ -3,7 +3,7 @@ import { PredicateFunction } from "../../../interfaces/PredicateFunction.ts";
 import { MapperFunction } from "../../../interfaces/MapperFunction.ts";
 import { Supplier } from "../../../interfaces/Supplier.ts";
 import { MaybePromise } from "../../../interfaces/Promises.ts";
-import { IAsyncOptionalValueProvider } from "../AsyncOptionalFactory.ts";
+import { IAsyncOptionalValueProvider } from "./IAsyncOptionalValueProvider.ts";
 
 export interface IAsyncOptional<T, E> extends IAsyncOptionalValueProvider<T, E> {
     empty(): Promise<boolean>;

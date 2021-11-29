@@ -5,7 +5,7 @@ import { Consumer } from "../../interfaces/Consumer.ts";
 import { PredicateFunction } from "../../interfaces/PredicateFunction.ts";
 import { NoSuchElementException } from "../../errors/NoSuchElementException.ts";
 import { Supplier } from "../../interfaces/Supplier.ts";
-import { IAsyncOptionalValueProvider } from "./AsyncOptionalFactory.ts";
+import { IAsyncOptionalValueProvider } from "./interfaces/IAsyncOptionalValueProvider.ts";
 import { MaybePromise } from "../../interfaces/Promises.ts";
 
 export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E> {

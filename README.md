@@ -97,3 +97,11 @@ await o2.get(); // only here
 ```bash
 deno lint && deno test -A --unstable --importmap imports.json --config deno.json
 ```
+
+## TODOS
+
+### Optional
+
+1. [ ] Make gateway from sync to async
+2. [ ] Testing invokes for lazy (sync-lazy and async).
+3. [x] Remove intermediate factories
