@@ -77,6 +77,16 @@ declare namespace Optional {
 }
 ```
 
+#### Sync-to-Async gateway
+
+You can convert sync implementations to async one by asyncMap, asyncFilter and asyncFlatMap methods on syncs:
+
+```typescript
+await Optional.of("some").asyncFilter(async value => repo.exists(value)).get();
+await Optional.of("some").asyncMap(async value => `mapper - ${value}`).get();
+await Optional.of("some").asyncFlatMap(async value => Optional.ofAsync(`mapper - ${value}`)).get();
+```
+
 #### Examples
 
 ```typescript
