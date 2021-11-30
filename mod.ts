@@ -11,8 +11,6 @@ export type { MaybePromise } from "./lib/interfaces/Promises.ts";
 // </editor-fold>
 
 
-// <editor-fold desc="Optional">
-export { IEmpty } from "./lib/optional/empty/IEmpty.ts";
-export { Empty } from "./lib/optional/empty/Empty.ts";
-export { Optional } from "./lib/optional/Optional.ts";
+// <editor-fold desc="Submodules">
+export * from "./lib/optional/mod.ts";
 // </editor-fold>

@@ -5,12 +5,20 @@ DiDi common module for the DiDi platform.
 ## Goals
 
 It implements core types other modules use them.
+
+```typescript
+import { } from "https://deno.land/x/didi_commons@v0.0.2/mod.ts";
+```
  
 ## Modules
 
 ### Optional
 
-Module provides 3 implementations for Optional. They are available in Optional statics:
+Module provides 3 implementations for Optional. They are available in Optional export
+
+```typescript
+import { Optional, Empty, IEmpty } from "https://deno.land/x/didi_commons@v0.0.2/lib/optional/mod.ts";
+```
 
 #### Sync early
 
