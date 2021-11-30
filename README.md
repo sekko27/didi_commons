@@ -102,6 +102,6 @@ deno lint && deno test -A --unstable --importmap imports.json --config deno.json
 
 ### Optional
 
-1. [ ] Make gateway from sync to async
-2. [ ] Testing invokes for lazy (sync-lazy and async).
+1. [x] Make gateway from sync to async
+2. [x] Testing invokes for lazy (sync-lazy and async).
 3. [x] Remove intermediate factories

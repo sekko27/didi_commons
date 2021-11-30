@@ -3,8 +3,11 @@ import { Supplier, UndefinedSupplier } from "../../../interfaces/Supplier.ts";
 import { EarlySyncOptionalTestsContext, ITestsContext, LazySyncOptionalTestsContext } from "./helpers.ts";
 import { NoSuchElementException } from "../../../errors/NoSuchElementException.ts";
 import { UndefinedEmpty } from "../../empty/Empty.ts";
+import { AsyncOptionalTestsContext } from "../../async/test/helpers.ts";
 
 function tests(ctx: ITestsContext<any>) {
+    const asyncContext = new AsyncOptionalTestsContext<undefined>(UndefinedEmpty);
+
     Didi.test("it should be empty")
         .toBeTrue(() => ctx.empty().empty());
 
@@ -50,7 +53,103 @@ function tests(ctx: ITestsContext<any>) {
 
     Didi.test("orElseThrow should be invoked")
         .toBeThrown(() => ctx.empty().orElseThrow(ctx.error()), Error);
+
+    Didi.test(`asyncFilter should be invoked on non-empty on termination`)
+        .eventuallyToBeInvoked(async () => true, async f => {
+            await ctx.some().asyncFilter(f).empty();
+        }, true);
+
+    Didi.test(`asyncFilter should not be invoked on empty on termination`)
+        .eventuallyToBeInvoked(async () => true, async f => {
+            await ctx.empty().asyncFilter(f).empty();
+        }, false);
+
+    Didi.test(`asyncFilter result to be empty when filter does not match`)
+        .eventuallyToBeTrue(() => ctx.some().asyncFilter(async () => false).empty());
+
+    Didi.test(`asyncFilter should pass instance`)
+        .eventuallyToBeSameInstance((value) => ctx.opt(value).asyncFilter(async () => true).get());
+
+    Didi.test("asyncMap should be invoked on non-empty on termination")
+        .eventuallyToBeInvoked(async () => true, async f => {
+            await ctx.some().asyncMap(f).empty();
+        }, true);
+
+    Didi.test(`asyncMap should not be invoked on empty on termination`)
+        .eventuallyToBeInvoked(async () => true, async f => {
+            await ctx.empty().asyncMap(f).empty();
+        }, false);
+
+    Didi.test("asyncMap should result empty on empty")
+        .eventuallyToBeTrue(() => ctx.some().filter(() => false).asyncMap(() => true).empty());
+
+    Didi.test(`asyncMap should result same instance`)
+        .eventuallyToBeSameInstance((value) => ctx.some().asyncMap(async () => value).get());
+
+    Didi.test("asyncFlatMap should be invoked on non-empty on termination")
+        .eventuallyToBeInvoked(async () => asyncContext.other(), async f => {
+            await ctx.some().asyncFlatMap(f).empty();
+        }, true);
+
+    Didi.test("asyncFlatMap should not be invoked on empty on termination")
+        .eventuallyToBeInvoked(async () => asyncContext.other(), async f => {
+            await ctx.empty().asyncFlatMap(f).empty();
+        }, false);
+
+    Didi.test("asyncFlatMap should result empty on empty")
+        .eventuallyToBeTrue(() => ctx.some().filter(() => false).asyncFlatMap(() => asyncContext.other()).empty());
+
+    Didi.test("asyncFlatMap should result same mapped instance")
+        .eventuallyToBeSameInstance((value) => ctx.some().asyncFlatMap(async () => asyncContext.opt(value)).get());
 }
 
-tests(new EarlySyncOptionalTestsContext<undefined>(UndefinedEmpty));
-tests(new LazySyncOptionalTestsContext<undefined>(UndefinedEmpty));
+function nonTerminationInvocationTests(name: string, ctx: ITestsContext<any>, expectedInvocation: boolean) {
+    const asyncContext = new AsyncOptionalTestsContext<undefined>(UndefinedEmpty);
+    Didi.test(`${name} - filter invocation without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => s.startsWith("s"), f => ctx.some().filter(f), expectedInvocation);
+
+    Didi.test(`${name} - map invocation without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => `invoked ${s}`, f => ctx.some().map(f), expectedInvocation);
+
+    Didi.test(`${name} - flatMap invocation without termination - ${expectedInvocation}`)
+        .toBeInvoked(() => ctx.other(), f => ctx.some().flatMap(f), expectedInvocation);
+
+    Didi.test(`${name} - async filter invocation without termination`)
+        .toBeInvoked(async (s: string) => s.startsWith(s), f => ctx.some().asyncFilter(f), false);
+
+    Didi.test(`${name} - filter invocation when applying async filter after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => s.startsWith(s), f => ctx.some().filter(f).asyncFilter(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - map invocation when applying async filter after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => `invoked ${s}`, f => ctx.some().map(f).asyncFilter(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - flat map invocation when applying async filter after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked(() => ctx.other(), f => ctx.some().flatMap(f).asyncFilter(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - filter invocation when applying async map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => s.startsWith(s), f => ctx.some().filter(f).asyncMap(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - map invocation when applying async map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => `invoked ${s}`, f => ctx.some().map(f).asyncMap(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - flat map invocation when applying async map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked(() => ctx.other(), f => ctx.some().flatMap(f).asyncMap(async () => true), expectedInvocation);
+
+    Didi.test(`${name} - filter invocation when applying async flat map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => s.startsWith(s), f => ctx.some().filter(f).asyncFlatMap(async () => asyncContext.some()), expectedInvocation);
+
+    Didi.test(`${name} - map invocation when applying async flat map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked((s: string) => `invoked ${s}`, f => ctx.some().map(f).asyncFlatMap(async () => asyncContext.some()), expectedInvocation);
+
+    Didi.test(`${name} - flat map invocation when applying flat async map after that - without termination - ${expectedInvocation}`)
+        .toBeInvoked(() => ctx.other(), f => ctx.some().flatMap(f).asyncFlatMap(async () => asyncContext.some()), expectedInvocation);
+}
+
+const earlyContext = new EarlySyncOptionalTestsContext<undefined>(UndefinedEmpty);
+const lazyContext = new LazySyncOptionalTestsContext<undefined>(UndefinedEmpty);
+
+tests(earlyContext);
+tests(lazyContext);
+
+nonTerminationInvocationTests("early", earlyContext, true);
+nonTerminationInvocationTests("lazy", lazyContext, false);
