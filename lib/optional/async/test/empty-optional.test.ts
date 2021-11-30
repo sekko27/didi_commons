@@ -4,7 +4,7 @@ import { AsyncOptionalTestsContext, ITestsContext } from "./helpers.ts";
 import { NoSuchElementException } from "../../../errors/NoSuchElementException.ts";
 import { UndefinedEmpty } from "../../empty/Empty.ts";
 
-function tests(ctx: ITestsContext<any>) {
+function tests(ctx: ITestsContext<undefined>) {
     Didi.test("it should be empty")
         .eventuallyToBeTrue(() => ctx.empty().empty());
 
@@ -48,7 +48,9 @@ function tests(ctx: ITestsContext<any>) {
         .eventuallyToBeSameInstance((value) => ctx.empty().orElse(value));
 
     Didi.test("orElseGet should invoke supplier")
-        .eventuallyToBeInvoked(() => "other", (supplier: Supplier<string>) => ctx.empty().orElseGet(supplier));
+        .eventuallyToBeInvoked(() => "other", async (supplier: Supplier<string>) => {
+            await ctx.empty().orElseGet(supplier);
+        });
 
     Didi.test("orElseGet should response else value")
         .eventuallyToBeSameInstance(value => ctx.empty().orElseGet(() => value));

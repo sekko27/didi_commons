@@ -7,12 +7,12 @@ export class Empty<E> implements IEmpty<E> {
         }
     }
 
-    getValue(): any {
+    getValue(): E {
         return this.emptyValues[0];
     }
 
-    test(value: any): boolean {
-        return this.emptyValues.indexOf(value) > -1;
+    test<V>(value: V | E): boolean {
+        return (this.emptyValues as (E | V)[]).indexOf(value) > -1;
     }
 }
 

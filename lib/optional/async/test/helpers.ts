@@ -6,7 +6,7 @@ import { Optional } from "../../Optional.ts";
 export interface ITestsContext<E> {
     opt<T>(value: T | E): IAsyncOptional<T, E>;
     some(): IAsyncOptional<string, E>;
-    empty(): IAsyncOptional<any, E>;
+    empty(): IAsyncOptional<unknown, E>;
     other(): IAsyncOptional<string, E>;
     error(): () => Error;
 }
@@ -23,8 +23,8 @@ export class AsyncOptionalTestsContext<E> implements ITestsContext<E> {
         return Optional.ofAsyncNonEmpty<string, E>("some", this.emptiness);
     }
 
-    empty(): IAsyncOptional<any, E> {
-        return Optional.ofAsyncNonEmpty<any, E>(this.emptiness.getValue(), this.emptiness);
+    empty(): IAsyncOptional<unknown, E> {
+        return Optional.ofAsyncNonEmpty<unknown, E>(this.emptiness.getValue(), this.emptiness);
     }
 
     other(): IAsyncOptional<string, E> {

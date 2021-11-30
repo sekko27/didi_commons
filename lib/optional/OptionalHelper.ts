@@ -10,7 +10,7 @@ export class OptionalHelper {
     }
 
     public static map<T, R, E>(emptiness: IEmpty<E>, mapper: MapperFunction<T, MaybePromise<R | E>>) {
-        return async (value: T | E) => emptiness.test(value) ? emptiness.getValue() : mapper(value as T);
+        return (value: T | E) => emptiness.test(value) ? emptiness.getValue() : mapper(value as T);
     }
 
     public static flatMap<T, R, E>(emptiness: IEmpty<E>, mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>) {

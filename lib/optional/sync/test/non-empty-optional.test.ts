@@ -3,7 +3,7 @@ import { UndefinedSupplier } from "../../../interfaces/Supplier.ts";
 import { EarlySyncOptionalTestsContext, ITestsContext, LazySyncOptionalTestsContext } from "./helpers.ts";
 import { UndefinedEmpty } from "../../empty/Empty.ts";
 
-function tests(ctx: ITestsContext<any>) {
+function tests(ctx: ITestsContext<undefined>) {
     Didi.test("it is not empty")
         .toBeFalse(() => ctx.some().empty());
 

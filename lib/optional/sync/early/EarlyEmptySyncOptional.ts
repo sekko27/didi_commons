@@ -4,7 +4,7 @@ import { ISyncOptional } from "../interfaces/ISyncOptional.ts";
 import { IAsyncOptional } from "../../async/interfaces/IAsyncOptional.ts";
 import { IOptionalFactory } from "../interfaces/IOptionalFactory.ts";
 
-export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
+export class EarlyEmptySyncOptional implements ISyncOptional<unknown, unknown> {
     constructor(private readonly factory: IOptionalFactory) {
     }
 
@@ -19,27 +19,27 @@ export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
     ifPresent(): void {
     }
 
-    filter(): ISyncOptional<any, any> {
-        return this;
+    filter<T>(): ISyncOptional<T, unknown> {
+        return this as unknown as ISyncOptional<T, unknown>;
     }
 
-    asyncFilter(): IAsyncOptional<any, any> {
+    asyncFilter<T>(): IAsyncOptional<T, unknown> {
         return this.factory.asyncEmpty();
     }
 
-    map(): ISyncOptional<any, any> {
-        return this;
+    map<R>(): ISyncOptional<R, unknown> {
+        return this as unknown as ISyncOptional<R, unknown>;
     }
 
-    asyncMap<R>(): IAsyncOptional<R, any> {
+    asyncMap<R>(): IAsyncOptional<R, unknown> {
         return this.factory.asyncEmpty();
     }
 
-    flatMap(): ISyncOptional<any, any> {
-        return this;
+    flatMap<R>(): ISyncOptional<R, unknown> {
+        return this as unknown as ISyncOptional<R, unknown>;
     }
 
-    asyncFlatMap<R>(): IAsyncOptional<R, any> {
+    asyncFlatMap<R>(): IAsyncOptional<R, unknown> {
         return this.factory.asyncEmpty();
     }
 
@@ -51,11 +51,11 @@ export class EarlyEmptySyncOptional implements ISyncOptional<any, any> {
         return other;
     }
 
-    orElseGet(supplier: Supplier<any>): any {
+    orElseGet<T>(supplier: Supplier<T>): T {
         return supplier();
     }
 
-    orElseThrow(errorSupplier: Supplier<Error>): any {
+    orElseThrow<T>(errorSupplier: Supplier<Error>): T {
         throw errorSupplier();
     }
 }

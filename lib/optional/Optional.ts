@@ -13,7 +13,7 @@ import { IAsyncOptionalValueProvider } from "./async/interfaces/IAsyncOptionalVa
 import { MapperFunction } from "../interfaces/MapperFunction.ts";
 
 export class Optional {
-    public static readonly EMPTY: ISyncOptional<any, any> = new EarlyEmptySyncOptional(Optional as IOptionalFactory);
+    public static readonly EMPTY: ISyncOptional<unknown, unknown> = new EarlyEmptySyncOptional(Optional as IOptionalFactory);
 
     public static of<T>(value: T | undefined): ISyncOptional<T, undefined> {
         return Optional.ofNonEmpty<T, undefined>(value, UndefinedEmpty);
@@ -25,7 +25,7 @@ export class Optional {
 
     public static ofNonEmpty<T, E>(value: T | E, emptiness: IEmpty<E>): ISyncOptional<T, E> {
         return emptiness.test(value)
-            ? Optional.EMPTY
+            ? Optional.EMPTY as ISyncOptional<T, E>
             : new EarlyNonEmptySyncOptional<T, E>(value as T, Optional as IOptionalFactory, emptiness);
     }
 
@@ -61,7 +61,7 @@ export class Optional {
         return new AsyncOptional<P, T, E>(previous, op, emptiness);
     }
 
-    public static asyncEmpty<T>(): IAsyncOptional<T, any> {
+    public static asyncEmpty<T>(): IAsyncOptional<T, unknown> {
         return Optional.ofAsyncNonEmpty<T, undefined>(undefined, UndefinedEmpty);
     }
 }

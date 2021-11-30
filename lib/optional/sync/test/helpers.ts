@@ -6,7 +6,7 @@ import { ILazySyncOptional } from "../interfaces/ILazySyncOptional.ts";
 export interface ITestsContext<E> {
     opt<T>(value: T | E): ISyncOptional<T, E>;
     some(): ISyncOptional<string, E>;
-    empty(): ISyncOptional<any, E>;
+    empty<T>(): ISyncOptional<T, E>;
     other(): ISyncOptional<string, E>;
     error(): () => Error;
 }
@@ -23,8 +23,8 @@ export class EarlySyncOptionalTestsContext<E> implements ITestsContext<E> {
         return Optional.ofNonEmpty<string, E>("some", this.emptiness);
     }
 
-    empty(): ISyncOptional<any, E> {
-        return Optional.EMPTY;
+    empty<T>(): ISyncOptional<T, E> {
+        return Optional.EMPTY as ISyncOptional<T, E>;
     }
 
     other(): ISyncOptional<string, E> {
@@ -48,8 +48,8 @@ export class LazySyncOptionalTestsContext<E> implements ITestsContext<E> {
         return Optional.ofLazyNonEmpty<string, E>("some", this.emptiness);
     }
 
-    empty(): ILazySyncOptional<any, E> {
-        return Optional.ofLazyNonEmpty<any, E>(this.emptiness.getValue(), this.emptiness);
+    empty<T>(): ILazySyncOptional<T, E> {
+        return Optional.ofLazyNonEmpty<T, E>(this.emptiness.getValue(), this.emptiness);
     }
 
     other(): ILazySyncOptional<string, E> {

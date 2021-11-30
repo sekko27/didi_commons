@@ -27,7 +27,7 @@ function toBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor:
     toBeEqual(invoked, expected);
 }
 
-async function eventuallyToBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<any, any>) => MaybePromise<void>, expected = true) {
+async function eventuallyToBeInvoked<A extends unknown[], R>(func: TestFunction<A, R>, executor: (func: TestFunction<A, R>) => MaybePromise<void>, expected = true) {
     let invoked = false;
     await executor((...args: A): R => {
         invoked = true;
@@ -61,11 +61,11 @@ class TestCaseBuilder {
         this.run(() => toBeEqual(supplier(), true));
     }
 
-    public eventuallyToBeTrue(supplier: Supplier<any>) {
+    public eventuallyToBeTrue(supplier: Supplier<unknown>) {
         this.run(async () => toBeEqual(await supplier(), true));
     }
 
-    public eventuallyToBeFalse(supplier: Supplier<any>) {
+    public eventuallyToBeFalse(supplier: Supplier<unknown>) {
         this.run(async () => toBeEqual(await supplier(), false));
     }
 
@@ -92,7 +92,7 @@ class TestCaseBuilder {
         this.run(() => toBeThrown(fn, errorClass));
     }
 
-    public toBeRejected<E extends Error = Error>(fn: (...args: unknown[]) => Promise<unknown>, errorClass?: new (...args: any[]) => E) {
+    public toBeRejected<E extends Error = Error>(fn: (...args: unknown[]) => Promise<unknown>, errorClass?: new (...args: string[]) => E) {
         this.run(() => toBeRejected(fn, errorClass));
     }
 

@@ -1,4 +1,4 @@
 export interface IEmpty<E> {
     getValue(): E;
-    test(value: any): boolean;
+    test<V>(value: E | V): boolean;
 }

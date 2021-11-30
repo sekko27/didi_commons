@@ -6,7 +6,7 @@ import {
 } from "./helpers.ts";
 import { UndefinedEmpty } from "../../empty/Empty.ts";
 
-function tests(ctx: ITestsContext<any>) {
+function tests(ctx: ITestsContext<undefined>) {
     Didi.test("it is not empty")
         .eventuallyToBeFalse(() => ctx.some().empty());
 
