@@ -9,6 +9,7 @@ import { ILazySyncOptional } from "../interfaces/ILazySyncOptional.ts";
 import { MaybePromise } from "../../../interfaces/Promises.ts";
 import { IAsyncOptional } from "../../async/interfaces/IAsyncOptional.ts";
 import { IOptionalFactory } from "../interfaces/IOptionalFactory.ts";
+import { OptionalHelper } from "../../OptionalHelper.ts";
 
 export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     private box: {value: T | E} | undefined = undefined;
@@ -52,9 +53,7 @@ export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     }
 
     asyncFilter(predicate: PredicateFunction<T, MaybePromise<boolean>>): IAsyncOptional<T, E> {
-        return this.factory.genericAsync<T, T, E>(this, async v => {
-            return !this.emptiness.test(v) && await predicate(v as T) ? v : this.emptiness.getValue();
-        }, this.emptiness);
+        return this.factory.genericAsync<T, T, E>(this, OptionalHelper.filter<T, E>(this.emptiness, predicate), this.emptiness);
     }
 
 
@@ -68,9 +67,7 @@ export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     }
 
     asyncMap<R>(mapper: MapperFunction<T, MaybePromise<R>>): IAsyncOptional<R, E> {
-        return this.factory.genericAsync<T, R, E>(this, async v => {
-            return this.emptiness.test(v) ? this.emptiness.getValue() : mapper(v as T);
-        }, this.emptiness);
+        return this.factory.genericAsync<T, R, E>(this, OptionalHelper.map<T, R, E>(this.emptiness, mapper), this.emptiness);
     }
 
     flatMap<R>(mapper: MapperFunction<T, ILazySyncOptional<R, E>>): ILazySyncOptional<R, E> {
@@ -83,9 +80,7 @@ export class LazySyncOptional<P, T, E> implements ILazySyncOptional<T, E> {
     }
 
     asyncFlatMap<R>(mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>): IAsyncOptional<R, E> {
-        return this.factory.genericAsync<T, R, E>(this, async v => {
-            return this.emptiness.test(v) ? this.emptiness.getValue() : (await mapper(v as T)).getValue();
-        }, this.emptiness);
+        return this.factory.genericAsync<T, R, E>(this, OptionalHelper.flatMap<T, R, E>(this.emptiness, mapper), this.emptiness);
     }
 
     get(): T {

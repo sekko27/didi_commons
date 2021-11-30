@@ -7,6 +7,7 @@ import { IOptionalFactory } from "../interfaces/IOptionalFactory.ts";
 import { MaybePromise } from "../../../interfaces/Promises.ts";
 import { IAsyncOptional } from "../../async/interfaces/IAsyncOptional.ts";
 import { IAsyncOptionalValueProvider } from "../../async/interfaces/IAsyncOptionalValueProvider.ts";
+import { OptionalHelper } from "../../OptionalHelper.ts";
 
 
 export class EarlyNonEmptySyncOptional<T, E> implements ISyncOptional<T, E> {
@@ -44,11 +45,7 @@ export class EarlyNonEmptySyncOptional<T, E> implements ISyncOptional<T, E> {
     asyncFilter(predicate: PredicateFunction<T, MaybePromise<boolean>>): IAsyncOptional<T, E> {
         return this.factory.genericAsync<T, T, E>(
             this.asPrevious(),
-            async (value) => {
-                return !this.emptiness.test(value) && await predicate(value as T)
-                    ? value
-                    : this.emptiness.getValue()
-            },
+            OptionalHelper.filter<T, E>(this.emptiness, predicate),
             this.emptiness
         );
     }
@@ -60,11 +57,7 @@ export class EarlyNonEmptySyncOptional<T, E> implements ISyncOptional<T, E> {
     asyncMap<R>(mapper: MapperFunction<T, MaybePromise<R>>): IAsyncOptional<R, E> {
         return this.factory.genericAsync<T, R, E>(
             this.asPrevious(),
-            (value) => {
-                return this.emptiness.test(value)
-                    ? this.emptiness.getValue()
-                    : mapper(value as T);
-            },
+            OptionalHelper.map<T, R, E>(this.emptiness, mapper),
             this.emptiness
         );
     }
@@ -78,11 +71,7 @@ export class EarlyNonEmptySyncOptional<T, E> implements ISyncOptional<T, E> {
     asyncFlatMap<R>(mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>): IAsyncOptional<R, E> {
         return this.factory.genericAsync<T, R, E>(
             this.asPrevious(),
-            async (value) => {
-                return this.emptiness.test(value)
-                    ? this.emptiness.getValue()
-                    : (await mapper(value as T)).getValue()
-            },
+            OptionalHelper.flatMap<T, R, E>(this.emptiness, mapper),
             this.emptiness
         );
     }

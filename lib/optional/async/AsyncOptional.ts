@@ -7,6 +7,7 @@ import { NoSuchElementException } from "../../errors/NoSuchElementException.ts";
 import { Supplier } from "../../interfaces/Supplier.ts";
 import { IAsyncOptionalValueProvider } from "./interfaces/IAsyncOptionalValueProvider.ts";
 import { MaybePromise } from "../../interfaces/Promises.ts";
+import { OptionalHelper } from "../OptionalHelper.ts";
 
 export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E> {
     private box: {value: MaybePromise<T | E>} | undefined = undefined;
@@ -41,16 +42,13 @@ export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E> {
     }
 
     filter(predicate: PredicateFunction<T, MaybePromise<boolean>>): IAsyncOptional<T, E> {
-        return new AsyncOptional<T, T, E>(
-            this,
-                async (value: T | E) => !this.emptiness.test(value) && await predicate(value as T) ? value : this.emptiness.getValue(),
-            this.emptiness);
+        return new AsyncOptional<T, T, E>(this, OptionalHelper.filter<T, E>(this.emptiness, predicate), this.emptiness);
     }
 
     map<R>(mapper: MapperFunction<T, MaybePromise<R | E>>): IAsyncOptional<R, E> {
         return new AsyncOptional<T, R, E>(
             this,
-            (value: T | E) => this.emptiness.test(value) ? this.emptiness.getValue() : mapper(value as T),
+            OptionalHelper.map<T, R, E>(this.emptiness, mapper),
             this.emptiness
         );
     }
@@ -58,7 +56,7 @@ export class AsyncOptional<P, T, E> implements IAsyncOptional<T, E> {
     flatMap<R>(mapper: MapperFunction<T, MaybePromise<IAsyncOptional<R, E>>>): IAsyncOptional<R, E> {
         return new AsyncOptional<T, R, E>(
             this,
-            async (value: T | E) => this.emptiness.test(value) ? this.emptiness.getValue() : (await mapper(value as T)).getValue(),
+            OptionalHelper.flatMap<T, R, E>(this.emptiness, mapper),
             this.emptiness
         );
     }
