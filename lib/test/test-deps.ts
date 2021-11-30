@@ -1,17 +1,15 @@
-// TODO TO-BE-EXTERNALIZED
 import { MapperFunction } from "../interfaces/MapperFunction.ts";
 
-export {
-    assertEquals,
-    assertStrictEquals
-} from "asserts";
-
+/**
+ * TODO deno coverage does not support import-map option, so we add import by absolute path, use from "asserts" later
+ * @see https://github.com/denoland/deno/issues/12826
+ */
 import {
     assertEquals as toBeEqual,
     assertStrictEquals as toBeStrictEqual,
     assertThrows as toBeThrown,
     assertRejects as toBeRejected,
-} from "asserts";
+} from "https://deno.land/std@0.114.0/testing/asserts.ts";
 
 import type { Supplier } from "../interfaces/Supplier.ts";
 import { MaybePromise } from "../interfaces/Promises.ts";

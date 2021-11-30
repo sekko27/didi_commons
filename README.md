@@ -1,4 +1,5 @@
 [![didi_commons ci](https://github.com/sekko27/didi_commons/workflows/Deno/badge.svg)](https://github.com/sekko/didi_commons)
+[![codecov](https://codecov.io/gh/sekko27/didi_commons/branch/main/graph/badge.svg)](https://codecov.io/gh/sekko27/didi_commons)
 
 # DIDI COMMONS
 
