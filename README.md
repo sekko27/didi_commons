@@ -2,9 +2,9 @@
 [![codecov](https://codecov.io/gh/sekko27/didi_commons/branch/master/graph/badge.svg?token=C1KBCKICFB)](https://codecov.io/gh/sekko27/didi_commons)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/didi_commons/mod.ts)
 
-![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Fdep-count%2Fx%2Fdidi_commons%2Fmod.ts)
-![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Fupdates%2Fx%2Fdidi_commons%2Fmod.ts)
-[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fdidi_commons%2Fmod.ts)](https://deno.land/x/didi_commons)
+![Custom badge](https://img.shields.io/endpoint?url=https://deno-visualizer.danopia.net/shields/dep-count/x/didi_commons/mod.ts)
+![Custom badge](https://img.shields.io/endpoint?url=https://deno-visualizer.danopia.net/shields/updates/x/didi_commons/mod.ts)
+[![Custom badge](https://img.shields.io/endpoint?url=https://deno-visualizer.danopia.net/shields/latest-version/x/didi_commons/mod.ts)](https://deno.land/x/didi_commons)
 
 # DIDI COMMONS
 
