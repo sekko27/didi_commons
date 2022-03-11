@@ -15,7 +15,7 @@ import { MapperFunction } from "../interfaces/MapperFunction.ts";
 export class Optional {
     public static readonly EMPTY: ISyncOptional<unknown, unknown> = new EarlyEmptySyncOptional(Optional as IOptionalFactory);
 
-    public static of<T>(value: T | undefined): ISyncOptional<T, undefined> {
+    public static of<T>(value: T | undefined): ISyncOptional<T> {
         return Optional.ofNonEmpty<T, undefined>(value, UndefinedEmpty);
     }
 
