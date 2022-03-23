@@ -9,7 +9,7 @@ import {
     assertStrictEquals as toBeStrictEqual,
     assertThrows as toBeThrown,
     assertRejects as toBeRejected,
-} from "https://deno.land/std@0.114.0/testing/asserts.ts";
+} from "https://deno.land/std@0.130.0/testing/asserts.ts";
 
 import type { Supplier } from "../interfaces/Supplier.ts";
 import { MaybePromise } from "../interfaces/Promises.ts";

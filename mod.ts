@@ -6,8 +6,8 @@ export { NoSuchElementException } from "./lib/errors/NoSuchElementException.ts";
 export type { Consumer } from "./lib/interfaces/Consumer.ts";
 export type { MapperFunction } from "./lib/interfaces/MapperFunction.ts";
 export type { PredicateFunction } from "./lib/interfaces/PredicateFunction.ts";
-export type { Supplier } from "./lib/interfaces/Supplier.ts";
-export type { MaybePromise } from "./lib/interfaces/Promises.ts";
+export type { NonPromise, MaybePromise, RequiredPromise } from "./lib/interfaces/Promises.ts";
+export type { Supplier, NullSupplier, UndefinedSupplier } from "./lib/interfaces/Supplier.ts";
 // </editor-fold>
 
 
