@@ -4,7 +4,7 @@
       {
         "name": "typescript-deno-plugin",
         "enable": true,
-        "importmap": "imports.json"
+        "importmap": "import_map.json"
       }
     ],
     "experimentalDecorators": true,

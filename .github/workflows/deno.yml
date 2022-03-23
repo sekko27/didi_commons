@@ -36,7 +36,7 @@ jobs:
         run: deno lint
 
       - name: Run tests
-        run: deno test -A --unstable --importmap imports.json --coverage=./.cov --config deno.json
+        run: deno test -A --unstable --importmap import_map.json --coverage=./.cov --config deno.json
 
       - name: generate lcov
         run: deno coverage --unstable --lcov ./.cov > cov.lcov

@@ -41,11 +41,11 @@ export class Optional {
         return new LazySyncOptional<E, T, E>(emptiness, () => value, emptiness, Optional as IOptionalFactory);
     }
 
-    public static ofAsync<T>(value: MaybePromise<T | undefined>, emptiness: IEmpty<undefined>): IAsyncOptional<T, undefined> {
+    public static ofAsync<T>(value: MaybePromise<T | undefined>, emptiness: IEmpty<undefined> = UndefinedEmpty): IAsyncOptional<T, undefined> {
         return Optional.ofAsyncNonEmpty<T, undefined>(value, emptiness);
     }
 
-    public static ofAsyncNonNull<T>(value: MaybePromise<T | undefined | null>, emptiness: IEmpty<undefined>): IAsyncOptional<T, undefined | null> {
+    public static ofAsyncNonNull<T>(value: MaybePromise<T | undefined | null>, emptiness: IEmpty<undefined | null> = UndefinedOrNullEmpty): IAsyncOptional<T, undefined | null> {
         return Optional.ofAsyncNonEmpty<T, undefined | null>(value, emptiness);
     }
 

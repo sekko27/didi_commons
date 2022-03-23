@@ -121,7 +121,7 @@ await o2.get(); // only here
 ## Testing
 
 ```bash
-deno lint && deno test -A --unstable --importmap imports.json --config deno.json
+deno lint && deno test -A --unstable --importmap import_map.json --config deno.json
 ```
 
 ## TODOS
