@@ -157,11 +157,11 @@ export class Result<T, E extends Error = Error> {
         }
     }
 
-    public asyncOrElse<F extends Error>(op: (err: E) => Promise<Result<T, F>>): Promise<Result<T, F>> {
+    public asyncOrElse<F extends Error = E, R = T>(op: (err: E) => Promise<Result<R, F>>): Promise<Result<R | T, F | E>> {
         if (this.value === undefined) {
             return op(this.error as E);
         } else {
-            return Promise.resolve(Result.Ok<T, F>(this.value.value));
+            return Promise.resolve(this);
         }
     }
 }

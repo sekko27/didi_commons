@@ -55,12 +55,12 @@ export class Kahn<N> implements IGraph<N> {
                 }
             }
         }
-        this.#ensureAcyclic(result, inDegrees);
+        this.#ensureAcyclic(result.length, inDegrees);
         return result;
     }
 
-    #ensureAcyclic(result: N[], inDegrees: number[]) {
-        if (result.length !== inDegrees.length) {
+    #ensureAcyclic(expectedLength: number, inDegrees: number[]) {
+        if (expectedLength !== inDegrees.length) {
             const cyclicNodes: N[] = inDegrees
                 .map((degree, index) => [degree, index])
                 .filter(([degree]) => degree > 0)
